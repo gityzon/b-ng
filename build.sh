@@ -26,6 +26,9 @@ chmod +x /usr/local/bin/brook
 #echo -n "The Brook link is ${brook_link}"
 
 cat >/etc/nginx/conf.d/brook.conf <<EOF
+ upstream frontend_server{
+    server 127.0.0.1:8080;
+ }
 server {
         listen       80;
         server_name  localhost;
