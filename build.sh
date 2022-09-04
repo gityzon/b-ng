@@ -5,7 +5,7 @@
 #brook_latest="https://github.com/txthinking/brook/releases/download/$ver/brook_linux_amd64"
 #brook_latest="https://github.com/txthinking/brook/releases/latest/download/brook_linux_amd64"
 
-wget -q https://github.com/txthinking/brook/releases/latest/download/brook_linux_amd64
+curl -L https://github.com/txthinking/brook/releases/latest/download/brook_linux_amd64
 chmod +x brook_linux_amd64
 
 ./brook_linux_amd64 wsserver -l :1080 --path ${path} -p $password &
@@ -14,16 +14,12 @@ chmod +x brook_linux_amd64
 
 [[ -z "${fake-web}" ]] && fake-web="alist.nn.ci"
 
-if [[ "${app_name}" != "skip" ]]; then
-    # generate a Brook link and a QR code
-    mkdir /root/$password
-    brook_link=$(./brook_linux_amd64 link -s wss://${app_name}.herokuapp.com:443${path} -p $password | tr -d "\n")
-    echo -n "${brook_link}" >/root/$password/link.txt
-    echo -n "${brook_link}" | qrencode -s 6 -o /root/$password/qr.png
-    echo -n "The Brook link is ${brook_link}"
-else
-    echo "skip generating"
-fi
+# generate a Brook link and a QR code
+mkdir /root/$password
+brook_link=$(./brook_linux_amd64 link -s wss://${app_name}.herokuapp.com:443${path} -p $password | tr -d "\n")
+echo -n "${brook_link}" >/root/$password/link.txt
+echo -n "${brook_link}" | qrencode -s 6 -o /root/$password/qr.png
+echo -n "The Brook link is ${brook_link}"
 
 cat >/etc/nginx/conf.d/brook.conf <<EOF
 server {
@@ -46,6 +42,9 @@ server {
         proxy_set_header Host \$http_host;
         proxy_set_header X-Real-IP \$remote_addr;
         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+    }
+    location /$password {
+        root /root;
     }
 }
 EOF
