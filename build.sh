@@ -1,5 +1,9 @@
 #!/bin/bash
 
+[[ -z "${path}" ]] && path="/ws"
+
+[[ -z "${fake-web}" ]] && fake-web="alist.nn.ci"
+
 #ver=$(wget -qO- "https://api.github.com/repos/txthinking/brook/releases/latest" | sed -n -r -e 's/.*"tag_name".+?"([vV0-9\.]+?)".*/\1/p')
 #[[ -z "${ver}" ]] && ver="v20210601"
 #brook_latest="https://github.com/txthinking/brook/releases/download/$ver/brook_linux_amd64"
@@ -11,11 +15,8 @@ wget --no-check-certificate https://github.com/txthinking/brook/releases/latest/
 chmod +x /usr/local/bin/brook
 
 # Run brook
-/usr/local/bin/brook wsserver --listen :${PORT} --password ${passwd}
+/usr/local/bin/brook wsserver -l :1080 --password ${password} --path ${path}
 
-[[ -z "${path}" ]] && path="/ws"
-
-[[ -z "${fake-web}" ]] && fake-web="alist.nn.ci"
 
 # generate a Brook link and a QR code
 #mkdir /root/$password
@@ -31,7 +32,7 @@ server {
 
     root /root;
     resolver 8.8.8.8:53;
-    
+
     location / {
         proxy_pass https://${fake-web};
     }
