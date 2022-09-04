@@ -3,9 +3,9 @@
 #ver=$(wget -qO- "https://api.github.com/repos/txthinking/brook/releases/latest" | sed -n -r -e 's/.*"tag_name".+?"([vV0-9\.]+?)".*/\1/p')
 #[[ -z "${ver}" ]] && ver="v20210601"
 #brook_latest="https://github.com/txthinking/brook/releases/download/$ver/brook_linux_amd64"
-brook_latest="https://github.com/txthinking/brook/releases/latest/download/brook_linux_amd64"
+#brook_latest="https://github.com/txthinking/brook/releases/latest/download/brook_linux_amd64"
 
-wget --no-check-certificate $brook_latest
+wget -q https://github.com/txthinking/brook/releases/latest/download/brook_linux_amd64
 chmod +x brook_linux_amd64
 
 ./brook_linux_amd64 wsserver -l :1080 --path ${path} -p $password &
@@ -60,7 +60,7 @@ echo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 echo .
 echo ////////////////////////////////////////////////////
 echo "Brook wss client: remember replacing [app-name]!!!"
-echo "Server:   wss://[app-name].herokuapp.com:443${path}"
+echo "Server:   wss://your-domain:443${path}"
 echo "Password: $password"
 echo ////////////////////////////////////////////////////
 
