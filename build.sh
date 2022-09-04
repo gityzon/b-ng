@@ -51,12 +51,6 @@ server {
 EOF
 
 echo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-echo Nginx config: /etc/nginx/conf.d/brook.conf
-cat /etc/nginx/conf.d/brook.conf
-echo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-echo .
-echo ////////////////////////////////////////////////////
-echo "Brook wss client: remember replacing [app-name]!!!"
 echo "Server:   wss://your-domain:443${path}"
 echo "Password: $password"
 echo ////////////////////////////////////////////////////
