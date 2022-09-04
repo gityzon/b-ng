@@ -5,7 +5,7 @@
 #brook_latest="https://github.com/txthinking/brook/releases/download/$ver/brook_linux_amd64"
 #brook_latest="https://github.com/txthinking/brook/releases/latest/download/brook_linux_amd64"
 
-wget --no-check-certificate https://github.com/txthinking/brook/releases/latest/download/brook_linux_amd64
+#wget --no-check-certificate https://github.com/txthinking/brook/releases/latest/download/brook_linux_amd64
 chmod +x brook_linux_amd64
 
 ./brook_linux_amd64 wsserver -l :1080 --path ${path} -p $password &
