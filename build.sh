@@ -17,7 +17,6 @@ chmod +x /usr/local/bin/brook
 # Run brook
 /usr/local/bin/brook wsserver -l :1080 --password ${password} --path ${path} &
 
-
 # generate a Brook link and a QR code
 #mkdir /root/$password
 #brook_link=$(./brook_linux_amd64 link -s wss://${app_name}.herokuapp.com:443${path} -p $password | tr -d "\n")
@@ -25,9 +24,17 @@ chmod +x /usr/local/bin/brook
 #echo -n "${brook_link}" | qrencode -s 6 -o /root/$password/qr.png
 #echo -n "The Brook link is ${brook_link}"
 
+#download&run panindex
+wget --no-check-certificate https://github.com/libsgh/PanIndex/releases/latest/download/PanIndex-linux-amd64.tar.gz -O panindex.tar.gz
+tar -zxvf panindex.tar.gz
+mv PanIndex-linux-amd64 panindex
+rm -f panindex.tar.gz & rm -f LICENSE
+./panindex &
+
+
 cat >/etc/nginx/conf.d/brook.conf <<EOF
- upstream frontend_server{
-    server 127.0.0.1:8080;
+ upstream backServer{
+    server 127.0.0.1:5238;
  }
 server {
         listen       80;
@@ -37,8 +44,16 @@ server {
     resolver 8.8.8.8:53;
 
     location / {
-        proxy_pass https://${fake-web};
+        proxy_redirect off;
+        proxy_pass http://127.0.0.1:5238;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection upgrade;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
+
     location = ${path} {
         if (\$http_upgrade != "websocket") {
             return 404;
