@@ -24,14 +24,7 @@ chmod +x /usr/local/bin/brook
 #echo -n "${brook_link}" | qrencode -s 6 -o /root/$password/qr.png
 #echo -n "The Brook link is ${brook_link}"
 
-#download&run panindex
-wget --no-check-certificate https://github.com/libsgh/PanIndex/releases/latest/download/PanIndex-linux-amd64.tar.gz -O panindex.tar.gz
-tar -zxvf panindex.tar.gz
-mv PanIndex-linux-amd64 panindex
-rm -f panindex.tar.gz & rm -f LICENSE
-./panindex &
-
-
+#write brook.conf
 cat >/etc/nginx/conf.d/brook.conf <<EOF
  upstream backServer{
     server 127.0.0.1:5238;
@@ -84,6 +77,13 @@ server {
   }
 }
 EOF
+
+#download&run panindex
+wget --no-check-certificate https://github.com/libsgh/PanIndex/releases/latest/download/PanIndex-linux-amd64.tar.gz -O panindex.tar.gz
+tar -zxvf panindex.tar.gz
+mv PanIndex-linux-amd64 panindex
+rm -f panindex.tar.gz & rm -f LICENSE
+/panindex &
 
 echo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 echo "Server:   wss://your-domain:443${path}"
