@@ -15,7 +15,7 @@ wget --no-check-certificate https://github.com/txthinking/brook/releases/latest/
 chmod +x /usr/local/bin/brook
 
 # Run brook
-/usr/local/bin/brook wsserver -l :1080 --password ${password} --path ${path}
+/usr/local/bin/brook wsserver -l :1080 --password ${password} --path ${path} &
 
 
 # generate a Brook link and a QR code
